@@ -9,18 +9,23 @@ namespace PCI_1761Control
 {
     public class PCIRealyCard
     {
-        private byte stateToWrite=0;
-        public byte StateToWrite
+        private byte stateDoToWrite=0;
+        public byte StateDoToWrite
         {
-            get { return stateToWrite; }
+            get { return stateDoToWrite; }
         }
 
-        private byte stateFromRead=0;
-        public byte StateFromread
+        private byte stateDoFromRead=0;
+        public byte StateDoFromread
         {
-            get { return stateFromRead; }
+            get { return stateDoFromRead; }
         }
 
+        private byte stateDIFromRead = 0;
+        public byte StateDIFromRead
+        {
+            get { return stateDIFromRead; }
+        }
         ErrorCode err;
 
         #region --Channels--
@@ -37,13 +42,17 @@ namespace PCI_1761Control
         #endregion
 
         InstantDoCtrl DoController;
+        InstantDiCtrl DiReader;
 
         public PCIRealyCard()
         {
             DoController = new InstantDoCtrl();
+            DiReader = new InstantDiCtrl();
             string deviceDescription = "DemoDevice,BID#0";
             DoController.SelectedDevice = new DeviceInformation(deviceDescription);
-            Read(Ports[0]);
+            DiReader.SelectedDevice = new DeviceInformation(deviceDescription);
+            ReadDoState(this.IORealyPort);
+            ReadDiState(this.IDIPort);
         }
 
         public PCIRealyCard(int deviceNumber)
@@ -59,7 +68,7 @@ namespace PCI_1761Control
             else if (Port > MaxPort || Port < MinChannel)
                 throw new ArgumentOutOfRangeException("Invalid Port");
             
-            stateToWrite|=(byte) (0x1 << Channel);            
+            stateDoToWrite|=(byte) (0x1 << Channel);            
         }
 
         public void TurnOffChannel(int Port, int Channel)
@@ -69,10 +78,10 @@ namespace PCI_1761Control
             else if (Port > MaxPort || Port < MinChannel)
                 throw new ArgumentOutOfRangeException("Invalid Port");
 
-            stateToWrite &= (byte)~(0x1 << Channel);
+            stateDoToWrite &= (byte)~(0x1 << Channel);
         }
 
-        public void Write(int port, byte state )
+        public void WriteDoState(int port, byte state )
         {
             err=DoController.Write(port, state);
             if (err != ErrorCode.Success)
@@ -81,11 +90,17 @@ namespace PCI_1761Control
             }
         }
 
-        public byte Read(int port)
+        public byte ReadDoState(int port)
         {
-            DoController.Read(port, out stateFromRead);
+            DoController.Read(port, out stateDoFromRead);
 
-            return stateFromRead;
+            return stateDoFromRead;
+        }
+
+        public byte ReadDiState(int port)
+        {
+            DiReader.Read(port, out stateDIFromRead);
+            return stateDIFromRead;
         }
 
     }

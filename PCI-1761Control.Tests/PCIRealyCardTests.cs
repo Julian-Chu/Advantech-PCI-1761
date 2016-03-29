@@ -20,7 +20,7 @@ namespace PCI_1761Control.Tests
             byte expect;
             //Act
             pci1761.TurnOnChannel(pci1761.Ports[0], pci1761.Channels[2]);
-            actual = pci1761.StateToWrite;
+            actual = pci1761.StateDoToWrite;
             expect = (0x1 << 2);
             //Assert
             Assert.AreEqual(expect, actual);
@@ -36,7 +36,7 @@ namespace PCI_1761Control.Tests
             //Act
             pci1761.TurnOnChannel(pci1761.Ports[0], pci1761.Channels[2]);
             pci1761.TurnOffChannel(pci1761.Ports[0], pci1761.Channels[2]);
-            actual = pci1761.StateToWrite;
+            actual = pci1761.StateDoToWrite;
             expect = 0;            
             //Assert
             Assert.AreEqual(expect, actual);
@@ -53,7 +53,7 @@ namespace PCI_1761Control.Tests
             foreach (var ch in pci1761.Channels)
                 pci1761.TurnOnChannel(pci1761.Ports[0], ch);
 
-            actual = pci1761.StateToWrite;
+            actual = pci1761.StateDoToWrite;
             expect = 255;
             //Assert
             Assert.AreEqual(expect, actual);
@@ -71,7 +71,7 @@ namespace PCI_1761Control.Tests
                 pci1761.TurnOnChannel(pci1761.Ports[0], ch);
             foreach (var ch in pci1761.Channels)
                 pci1761.TurnOffChannel(pci1761.Ports[0],ch);
-            actual = pci1761.StateToWrite;
+            actual = pci1761.StateDoToWrite;
             expect = 0;
             //Assert
             Assert.AreEqual(expect, actual);
@@ -86,8 +86,8 @@ namespace PCI_1761Control.Tests
             byte expect;
             //Act
             pci1761.TurnOnChannel(pci1761.Ports[0], pci1761.Channels[2]);
-            pci1761.Write(pci1761.Ports[0], pci1761.StateToWrite);
-            actual = pci1761.Read(pci1761.Ports[0]);
+            pci1761.WriteDoState(pci1761.Ports[0], pci1761.StateDoToWrite);
+            actual = pci1761.ReadDoState(pci1761.Ports[0]);
             expect = (0x1 << 2);
             //Assert
             Assert.AreEqual(expect, actual);

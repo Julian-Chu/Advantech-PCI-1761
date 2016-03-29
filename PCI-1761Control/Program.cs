@@ -29,17 +29,17 @@ namespace PCI_1761Control
                     case 'a':
                         foreach (var ch in PCI1761.Channels)
                             PCI1761.TurnOnChannel(PCI1761.Ports[0], ch);
-                        PCI1761.Write(0, PCI1761.StateToWrite);
+                        PCI1761.WriteDoState(0, PCI1761.StateDoToWrite);
                         break;
                     case 'b':
                         foreach (var ch in PCI1761.Channels)
                             PCI1761.TurnOffChannel(PCI1761.Ports[0], ch);
-                        PCI1761.Write(0, PCI1761.StateToWrite);
+                        PCI1761.WriteDoState(0, PCI1761.StateDoToWrite);
                         break;
                     default:
                         break;
                 }
-                Console.WriteLine("The state is:" + PCI1761.Read(0));
+                Console.WriteLine("The state is:" + PCI1761.ReadDoState(0));
                 Console.WriteLine("Press <ESC> to exit... or Any key to continue!");
 
             } while (Console.ReadKey().Key!=ConsoleKey.Escape);
