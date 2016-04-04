@@ -9,16 +9,18 @@ using NUnit.Framework;
 namespace PCI_1761Control.Tests
 {
     [TestFixture()]
-    public class PCIRealyCardTests
+    public class PCIRelayCardTests
     {
         [Test()]
         public void TurnOnChannel_WhenStateAreAllLowAndTurnOn_Port0_Ch2_OnlyCh2IsHigh()
         {
             //Assign
-            PCIRealyCard pci1761 = new PCIRealyCard();
+            PCIRelayCard pci1761 = new PCIRelayCard();
             byte actual;
             byte expect;
             //Act
+            foreach (var ch in pci1761.Channels)
+                pci1761.TurnOffChannel(pci1761.Ports[0], ch);
             pci1761.TurnOnChannel(pci1761.Ports[0], pci1761.Channels[2]);
             actual = pci1761.StateDoToWrite;
             expect = (0x1 << 2);
@@ -30,7 +32,7 @@ namespace PCI_1761Control.Tests
         public void TurnOffChannel_OnlyChannel2IsHighAndTurnIt_Port0_Ch2_StateAreAllLow()
         {
             //Assign
-            PCIRealyCard pci1761 = new PCIRealyCard();
+            PCIRelayCard pci1761 = new PCIRelayCard();
             byte actual;
             byte expect;
             //Act
@@ -46,7 +48,7 @@ namespace PCI_1761Control.Tests
         public void TurnOnChannel_TurnOnAllChannels_StateAreAllHigh()
         {
             //Assign
-            PCIRealyCard pci1761 = new PCIRealyCard();
+            PCIRelayCard pci1761 = new PCIRelayCard();
             byte actual;
             byte expect;
             //Act
@@ -63,7 +65,7 @@ namespace PCI_1761Control.Tests
         public void TurnOffChannel_TurnOffAllChannels_StateAreAllLow()
         {
             //Assign
-            PCIRealyCard pci1761 = new PCIRealyCard();
+            PCIRelayCard pci1761 = new PCIRelayCard();
             byte actual;
             byte expect;
             //Act
@@ -81,12 +83,14 @@ namespace PCI_1761Control.Tests
         public void Write_WhenStateAreAllLowAndTurnOn_Port0_Ch2_OnlyCh2IsHigh()
         {
             //Assign
-            PCIRealyCard pci1761 = new PCIRealyCard();
+            PCIRelayCard pci1761 = new PCIRelayCard();
             byte actual;
             byte expect;
             //Act
+            foreach (var ch in pci1761.Channels)
+                pci1761.TurnOffChannel(pci1761.Ports[0], ch);
             pci1761.TurnOnChannel(pci1761.Ports[0], pci1761.Channels[2]);
-            pci1761.WriteDoState(pci1761.Ports[0], pci1761.StateDoToWrite);
+            //pci1761.WriteDoState(pci1761.Ports[0], pci1761.StateDoToWrite);
             actual = pci1761.ReadDoState(pci1761.Ports[0]);
             expect = (0x1 << 2);
             //Assert

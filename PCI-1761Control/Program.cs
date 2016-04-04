@@ -11,12 +11,38 @@ namespace PCI_1761Control
     {
         static void Main(string[] args)
         {
-            PCIRealyCard PCI1761 = new PCIRealyCard();
+            PCIRelayCard PCI1761 = new PCIRelayCard();
 
 #if DEBUG
             Console.WriteLine("DEBUG MODE BY #if");
 #endif
+#if Release
+            Console.WriteLine("Release mode");
+#endif
+
             ShowDebugMode();
+            byte TaskState = PCI1761.ReadDoState(0);
+            Task.Factory.StartNew(() =>
+            {
+                while (true)
+                {
+                    object lockObject = new object();
+                    lock (lockObject)
+                    {
+                        if (TaskState != PCI1761.ReadDoState(0))
+                        {
+                            Console.WriteLine("StateIsChanged");
+                            Console.WriteLine(Convert.ToString(TaskState, 2).PadLeft(8, '0'));
+                            TaskState = PCI1761.ReadDoState(0);
+                            Task.Delay(100);
+                            Console.WriteLine(Convert.ToString(TaskState, 2).PadLeft(8, '0'));
+                        }
+                    }
+                    Task.Delay(200);
+                }
+            }
+            );
+
 
             do
             {
@@ -29,21 +55,23 @@ namespace PCI_1761Control
                     case 'a':
                         foreach (var ch in PCI1761.Channels)
                             PCI1761.TurnOnChannel(PCI1761.Ports[0], ch);
-                        PCI1761.WriteDoState(0, PCI1761.StateDoToWrite);
+                        //PCI1761.WriteDoState(0, PCI1761.StateDoToWrite);
                         break;
                     case 'b':
                         foreach (var ch in PCI1761.Channels)
                             PCI1761.TurnOffChannel(PCI1761.Ports[0], ch);
-                        PCI1761.WriteDoState(0, PCI1761.StateDoToWrite);
+                        //PCI1761.WriteDoState(0, PCI1761.StateDoToWrite);
                         break;
                     default:
                         break;
                 }
-                Console.WriteLine("The state is:" + PCI1761.ReadDoState(0));
+                // Console.WriteLine("The state is:" + PCI1761.ReadDoState(0));
                 Console.WriteLine("Press <ESC> to exit... or Any key to continue!");
 
-            } while (Console.ReadKey().Key!=ConsoleKey.Escape);
+            } while (Console.ReadKey().Key != ConsoleKey.Escape);
         }
+
+
 
         [Conditional("DEBUG")]
         private static void ShowDebugMode()

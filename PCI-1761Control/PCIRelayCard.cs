@@ -7,7 +7,7 @@ using Automation.BDaq;
 
 namespace PCI_1761Control
 {
-    public class PCIRealyCard
+    public class PCIRelayCard
     {
         private byte stateDoToWrite=0;
         public byte StateDoToWrite
@@ -34,7 +34,7 @@ namespace PCI_1761Control
         readonly public int MaxChannel = 7;
         #endregion
         #region --Ports--
-        readonly public int IORealyPort=0;
+        readonly public int IORelayPort=0;
         readonly public int IDIPort=1;
         readonly public int[] Ports = new int[2] { 0, 1 };
         readonly public int MinPort = 0;
@@ -44,18 +44,18 @@ namespace PCI_1761Control
         InstantDoCtrl DoController;
         InstantDiCtrl DiReader;
 
-        public PCIRealyCard()
+        public PCIRelayCard()
         {
             DoController = new InstantDoCtrl();
             DiReader = new InstantDiCtrl();
             string deviceDescription = "DemoDevice,BID#0";
             DoController.SelectedDevice = new DeviceInformation(deviceDescription);
             DiReader.SelectedDevice = new DeviceInformation(deviceDescription);
-            ReadDoState(this.IORealyPort);
+            ReadDoState(this.IORelayPort);
             ReadDiState(this.IDIPort);
         }
 
-        public PCIRealyCard(int deviceNumber)
+        public PCIRelayCard(int deviceNumber)
         {
             DoController = new InstantDoCtrl();
             DoController.SelectedDevice = new DeviceInformation(deviceNumber);
@@ -67,8 +67,10 @@ namespace PCI_1761Control
                 throw new ArgumentOutOfRangeException("Invalid Channel");
             else if (Port > MaxPort || Port < MinChannel)
                 throw new ArgumentOutOfRangeException("Invalid Port");
-            
-            stateDoToWrite|=(byte) (0x1 << Channel);            
+
+            stateDoToWrite = ReadDoState(Port);
+            stateDoToWrite|=(byte) (0x1 << Channel);
+            WriteDoState(Port, stateDoToWrite);
         }
 
         public void TurnOffChannel(int Port, int Channel)
@@ -78,10 +80,13 @@ namespace PCI_1761Control
             else if (Port > MaxPort || Port < MinChannel)
                 throw new ArgumentOutOfRangeException("Invalid Port");
 
+            stateDoToWrite = ReadDoState(Port);
             stateDoToWrite &= (byte)~(0x1 << Channel);
+
+            WriteDoState(Port, stateDoToWrite);
         }
 
-        public void WriteDoState(int port, byte state )
+        private void WriteDoState(int port, byte state )
         {
             err=DoController.Write(port, state);
             if (err != ErrorCode.Success)
