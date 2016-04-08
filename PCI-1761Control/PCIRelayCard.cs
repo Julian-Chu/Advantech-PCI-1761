@@ -38,7 +38,11 @@ namespace PCI_1761Control
         readonly public int IDIPort=1;
         readonly public int[] Ports = new int[2] { 0, 1 };
         readonly public int MinPort = 0;
-        readonly public int MaxPort = 1;
+        private int maxPort = 1;
+        public int MaxPort
+        {
+            get { return maxPort; }
+        }
         #endregion
 
         InstantDoCtrl DoController;
@@ -59,6 +63,11 @@ namespace PCI_1761Control
         {
             DoController = new InstantDoCtrl();
             DoController.SelectedDevice = new DeviceInformation(deviceNumber);
+        }
+
+        public void SetMaxPorts(int PortNumbers)
+        {
+            maxPort = PortNumbers;
         }
 
         public void TurnOnChannel(int Port, int Channel)
