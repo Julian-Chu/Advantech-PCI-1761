@@ -84,6 +84,8 @@ namespace PCI_1761Control
         public void WriteDoState(int port, byte state )
         {
             err=DoController.Write(port, state);
+            var t = Task.Delay(200);
+            t.Wait();
             if (err != ErrorCode.Success)
             {
                 throw new Exception("Sorry ! Some errors happened, the error code is: " + err.ToString());
