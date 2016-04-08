@@ -7,7 +7,7 @@ using Automation.BDaq;
 
 namespace PCI_1761Control
 {
-    public class PCIRealyCard
+    public class PCIRelayCard
     {
         private byte stateDoToWrite=0;
         public byte StateDoToWrite
@@ -34,7 +34,7 @@ namespace PCI_1761Control
         readonly public int MaxChannel = 7;
         #endregion
         #region --Ports--
-        readonly public int IORealyPort=0;
+        readonly public int IORelayPort=0;
         readonly public int IDIPort=1;
         readonly public int[] Ports = new int[2] { 0, 1 };
         readonly public int MinPort = 0;
@@ -44,18 +44,18 @@ namespace PCI_1761Control
         InstantDoCtrl DoController;
         InstantDiCtrl DiReader;
 
-        public PCIRealyCard()
+        public PCIRelayCard()
         {
             DoController = new InstantDoCtrl();
             DiReader = new InstantDiCtrl();
             string deviceDescription = "DemoDevice,BID#0";
             DoController.SelectedDevice = new DeviceInformation(deviceDescription);
             DiReader.SelectedDevice = new DeviceInformation(deviceDescription);
-            ReadDoState(this.IORealyPort);
+            stateDoToWrite=ReadDoState(this.IORelayPort);
             ReadDiState(this.IDIPort);
         }
 
-        public PCIRealyCard(int deviceNumber)
+        public PCIRelayCard(int deviceNumber)
         {
             DoController = new InstantDoCtrl();
             DoController.SelectedDevice = new DeviceInformation(deviceNumber);

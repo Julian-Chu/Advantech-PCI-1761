@@ -11,7 +11,7 @@ namespace PCI_1761Control
     {
         static void Main(string[] args)
         {
-            PCIRealyCard PCI1761 = new PCIRealyCard();
+            PCIRelayCard PCI1761 = new PCIRelayCard();
 
 #if DEBUG
             Console.WriteLine("DEBUG MODE BY #if");
