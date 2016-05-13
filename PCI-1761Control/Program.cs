@@ -29,12 +29,12 @@ namespace PCI_1761Control
                     case 'a':
                         foreach (var ch in PCI1761.Channels)
                             PCI1761.TurnOnChannel(PCI1761.Ports[0], ch);
-                        PCI1761.WriteDoState(0, PCI1761.StateDoToWrite);
+                        PCI1761.WriteDoState(0);
                         break;
                     case 'b':
                         foreach (var ch in PCI1761.Channels)
                             PCI1761.TurnOffChannel(PCI1761.Ports[0], ch);
-                        PCI1761.WriteDoState(0, PCI1761.StateDoToWrite);
+                        PCI1761.WriteDoState(0);
                         break;
                     default:
                         break;

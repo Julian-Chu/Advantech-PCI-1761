@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Automation.BDaq;
 
-namespace PCI_1761Control
+namespace RelayCard_PCI1761
 {
     public class PCIRelayCard
     {
