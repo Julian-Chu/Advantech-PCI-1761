@@ -38,7 +38,11 @@ namespace PCI_1761Control
         readonly public int IDIPort=1;
         readonly public int[] Ports = new int[2] { 0, 1 };
         readonly public int MinPort = 0;
-        readonly public int MaxPort = 1;
+        private int maxPort = 1;
+        public int MaxPort
+        {
+            get { return maxPort; }
+        }
         #endregion
 
         InstantDoCtrl DoController;
@@ -51,7 +55,11 @@ namespace PCI_1761Control
             string deviceDescription = "DemoDevice,BID#0";
             DoController.SelectedDevice = new DeviceInformation(deviceDescription);
             DiReader.SelectedDevice = new DeviceInformation(deviceDescription);
+<<<<<<< HEAD:PCI-1761Control/PCIRelayCard.cs
             stateDoToWrite=ReadDoState(this.IORelayPort);
+=======
+            ReadDoState(this.IORelayPort);
+>>>>>>> master:PCI-1761Control/PCIRelayCard.cs
             ReadDiState(this.IDIPort);
         }
 
@@ -66,14 +74,21 @@ namespace PCI_1761Control
 
         }
 
+        public void SetMaxPorts(int PortNumbers)
+        {
+            maxPort = PortNumbers;
+        }
+
         public void TurnOnChannel(int Port, int Channel)
         {
             if (Channel > MaxChannel || Channel < MinChannel)
                 throw new ArgumentOutOfRangeException("Invalid Channel");
             else if (Port > MaxPort || Port < MinChannel)
                 throw new ArgumentOutOfRangeException("Invalid Port");
-            
-            stateDoToWrite|=(byte) (0x1 << Channel);            
+
+            stateDoToWrite = ReadDoState(Port);
+            stateDoToWrite|=(byte) (0x1 << Channel);
+            WriteDoState(Port, stateDoToWrite);
         }
 
         public void TurnOffChannel(int Port, int Channel)
@@ -83,9 +98,13 @@ namespace PCI_1761Control
             else if (Port > MaxPort || Port < MinChannel)
                 throw new ArgumentOutOfRangeException("Invalid Port");
 
+            stateDoToWrite = ReadDoState(Port);
             stateDoToWrite &= (byte)~(0x1 << Channel);
+
+            WriteDoState(Port, stateDoToWrite);
         }
 
+<<<<<<< HEAD:PCI-1761Control/PCIRelayCard.cs
         public void TurnOnMultiChannels(int Port,params int[] channels)
         {
             for (int i = 0; i < channels.Count(); i++)
@@ -103,6 +122,9 @@ namespace PCI_1761Control
         }
 
         public void WriteDoState(int port)
+=======
+        private void WriteDoState(int port, byte state )
+>>>>>>> master:PCI-1761Control/PCIRelayCard.cs
         {
             err=DoController.Write(port, StateDoToWrite);
             if (err != ErrorCode.Success)
