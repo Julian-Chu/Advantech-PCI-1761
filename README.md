@@ -2,14 +2,15 @@
 
 Using adapter pattern to simplify code and enhance readability
         
-<h1>Origianl way to open a port:</h1>
-// choose port
-  stateDoToWrite = ReadDoState(Port);  
-// update all channels in port by calculating bytes
-  stateDoToWrite|=(byte) (0x1 << Channel); 
-// execute update in all channels  
-  WriteDoState(Port, stateDoToWrite)            
+<h6>Origianl way to open a port:</h6>
+<p> 
+//choose port<br/>
+stateDoToWrite = ReadDoState(Port);  <br/>
+// update all channels in port by calculating bytes<br/>
+  stateDoToWrite|=(byte) (0x1 << Channel);  <br/>
+// execute update in all channels   <br/>
+  WriteDoState(Port, stateDoToWrite)            </p>
         
         
-New Way to open a port:
+<h6>New Way to open a port:</h6>
   TurnOnChannel(port, channel);
