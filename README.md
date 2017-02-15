@@ -2,7 +2,7 @@
 
 Using adapter pattern to simplify code and enhance readability
         
-Origianl way to open a port:
+<h1>Origianl way to open a port:</h1>
 // choose port
   stateDoToWrite = ReadDoState(Port);  
 // update all channels in port by calculating bytes
