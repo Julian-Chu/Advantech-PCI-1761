@@ -3,9 +3,12 @@
 Using adapter pattern to simplify code and enhance readability
         
 Origianl way to open a port:
-  stateDoToWrite = ReadDoState(Port);           // choose port
-  stateDoToWrite|=(byte) (0x1 << Channel);      // update all channels in port
-  WriteDoState(Port, stateDoToWrite)            // execute update in all channels  
+// choose port
+  stateDoToWrite = ReadDoState(Port);  
+// update all channels in port by calculating bytes
+  stateDoToWrite|=(byte) (0x1 << Channel); 
+// execute update in all channels  
+  WriteDoState(Port, stateDoToWrite)            
         
         
 New Way to open a port:
