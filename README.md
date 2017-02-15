@@ -2,7 +2,7 @@
 
 Using adapter pattern to simplify code and enhance readability
         
-<h6>Origianl way to open a port:</h6>
+<h3>Origianl way to open a port:</h3>
 <p> 
 //choose port<br/>
 stateDoToWrite = ReadDoState(Port);  <br/>
@@ -12,5 +12,5 @@ stateDoToWrite = ReadDoState(Port);  <br/>
   WriteDoState(Port, stateDoToWrite)            </p>
         
         
-<h6>New Way to open a port:</h6>
+<h3>New Way to open a port:</h3>
   TurnOnChannel(port, channel);
