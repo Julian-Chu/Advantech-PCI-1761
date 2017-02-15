@@ -1,4 +1,4 @@
-# Advantech relay card:  PCI-1761
+# Advantech PCI relay card:  PCI-1761
 
 Using adapter pattern to simplify code and enhance readability
         
